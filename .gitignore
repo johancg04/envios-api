@@ -1,1 +1,4 @@
 .idea/
+envios_api.egg-info/
+app.egg-info/
+build/

@@ -1,0 +1,17 @@
+title = "envios-api"
+
+[owner]
+name = "johancg04"
+organization = "labs"
+
+[project]
+name = "envios-api"
+version = "0.0.1"
+description = "Envios API"
+readme = "README.md"
+authors = [
+    { name = "johancg04", email = "j.contreras.granados.04@gmail.com" }
+]
+dependencies = [
+    "psycopg2==2.9.11"
+]
