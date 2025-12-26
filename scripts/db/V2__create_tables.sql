@@ -1,5 +1,5 @@
 CREATE TABLE usuario (
-    id_usuario integer PRIMARY KEY,
+    id_usuario serial PRIMARY KEY,
     nombre varchar(50) NOT NULl,
     correo varchar(50) NOT NULL,
     usuario varchar(20) NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE usuario (
 );
 
 CREATE TABLE cliente (
-    id_cliente integer PRIMARY KEY,
+    id_cliente serial PRIMARY KEY,
     nombre varchar(50) NOT NULL,
     dni char(8) NOT NULL,
     telefono varchar(20) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE cliente (
 );
 
 CREATE TABLE envio (
-    id_envio integer PRIMARY KEY,
+    id_envio serial PRIMARY KEY,
     id_cliente integer NOT NULL,
     id_usuario integer NOT NULL,
     codigo_envio varchar(10) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE envio (
 );
 
 CREATE TABLE seguimiento (
-    id_seguimiento integer PRIMARY KEY,
+    id_seguimiento serial PRIMARY KEY,
     id_envio integer NOT NULL,
     origen varchar(20) NOT NULL,
     destino varchar(20) NOT NULL,
