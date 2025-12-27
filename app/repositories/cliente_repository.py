@@ -28,3 +28,5 @@ class ClienteRepository:
         finally:
             if conn:
                 conn.close()
+
+cliente_repository = ClienteRepository()
