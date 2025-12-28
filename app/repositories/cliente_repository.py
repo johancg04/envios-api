@@ -10,21 +10,21 @@ class ClienteRepository:
 
     def insertar(self, cliente_crear: ClienteCrear) -> Cliente | None:
         sql = """ INSERT INTO cliente(nombre, dni, telefono, correo)
-                  VALUES (%s, %s, %s, %s) RETURNING id_cliente """
+                  VALUES (%s, %s, %s, %s) RETURNING id_cliente, nombre, dni, telefono, correo """
         conn = None
-        id_cliente_nuevo = None
+        cliente_nuevo = None
         try:
             conn = crear_conexion()
             with conn.cursor() as cursor:
-                cursor.execute(sql, (cliente_crear.nombre, cliente_crear.dni, cliente_crear.telefono, cliente_crear.correo))
+                cursor.execute(sql,
+                               (cliente_crear.nombre, cliente_crear.dni, cliente_crear.telefono, cliente_crear.correo))
                 result = cursor.fetchone()
-                id_cliente_nuevo = result[0]
+                cliente_nuevo = Cliente(id=result[0],
+                                        nombre=result[1],
+                                        dni=result[2],
+                                        telefono=result[3],
+                                        correo=result[4])
             conn.commit()
-            cliente_nuevo = Cliente(id=id_cliente_nuevo,
-                                    nombre=cliente_crear.nombre,
-                                    dni=cliente_crear.dni,
-                                    telefono=cliente_crear.telefono,
-                                    correo=cliente_crear.correo)
             return cliente_nuevo
         except(Exception, psycopg2.DatabaseError) as error:
             print(f"error: {error}")
