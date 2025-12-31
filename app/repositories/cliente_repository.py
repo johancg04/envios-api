@@ -1,3 +1,5 @@
+from typing import Any
+
 import psycopg2
 
 from app.db.config import crear_conexion
@@ -33,6 +35,28 @@ class ClienteRepository:
         finally:
             if conn:
                 conn.close()
+
+    def mostrar(self) -> list | dict:
+        sql = """ SELECT * FROM cliente """
+        conn = None
+        cliente_mostrar = None
+        try:
+            conn = crear_conexion()
+            with conn.cursor() as cursor:
+                cursor.execute(sql)
+                cliente_mostrar = cursor.fetchall()
+            conn.commit()
+            return cliente_mostrar
+
+        except(Exception, psycopg2.DatabaseError) as error:
+            print(f"error: {error}")
+            if conn:
+                conn.rollback()
+
+        finally:
+            if conn:
+                conn.close()
+
 
 
 cliente_repository = ClienteRepository()

@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
 from app.models.cliente import ClienteCrear, Cliente
+from app.repositories.cliente_repository import cliente_repository
 from app.services.cliente_service import cliente_service
 
 router = APIRouter()
@@ -8,3 +9,7 @@ router = APIRouter()
 @router.post('/v1/clientes', response_model=None)
 async def crear_cliente(cliente: ClienteCrear) -> Cliente | dict:
     return cliente_service.agregar(cliente)
+
+@router.get('/v1/clientes', response_model=None)
+async def listar_clientes() -> list | dict:
+    return cliente_service.mostrar_cliente()

@@ -13,5 +13,12 @@ class ClienteService:
         else:
             return {"mensaje_error": "Error al agregar cliente"}
 
+    def mostrar_cliente(self) -> list | dict:
+        print(cliente_repository.mostrar())
+        mostrar = cliente_repository.mostrar()
+        if mostrar:
+            return mostrar
+        else:
+            return {"mensaje_error": "Error al mostrar cliente"}
 
 cliente_service = ClienteService()
