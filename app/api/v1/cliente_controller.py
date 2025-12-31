@@ -12,4 +12,4 @@ async def crear_cliente(cliente: ClienteCrear) -> Cliente | dict:
 
 @router.get('/v1/clientes', response_model=None)
 async def listar_clientes() -> list | dict:
-    return cliente_service.mostrar_cliente()
+    return cliente_service.mostrar_clientes()

@@ -40,13 +40,18 @@ class ClienteRepository:
         sql = """ SELECT * FROM cliente """
         conn = None
         cliente_mostrar = None
+        cliente = None
+        lista_clientes = []
         try:
             conn = crear_conexion()
             with conn.cursor() as cursor:
                 cursor.execute(sql)
                 cliente_mostrar = cursor.fetchall()
+                for i in cliente_mostrar:
+                    cliente = Cliente(id=i[0], nombre=i[1], dni=i[2], telefono=i[3], correo=i[4])
+                    lista_clientes.append(cliente)
             conn.commit()
-            return cliente_mostrar
+            return lista_clientes
 
         except(Exception, psycopg2.DatabaseError) as error:
             print(f"error: {error}")
