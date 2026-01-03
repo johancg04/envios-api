@@ -10,8 +10,8 @@ class UsuarioRepository:
 
     def insertar(self, usuario_crear: UsuarioCrear) -> Usuario | None:
         sql = """ INSERT INTO usuario(nombre, correo, usuario, contrasenia, rol, estado)
-                  VALUES (%s, %s, %s, %s, %s,
-                          %s) RETURNING id_usuario, nombre, correo, usuario, contrasenia, rol, estado """
+                  VALUES (%s, %s, %s, %s, %s, %s)
+                  RETURNING id_usuario, nombre, correo, usuario, contrasenia, rol, estado """
 
         conn = None
         usuario_nuevo = None

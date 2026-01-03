@@ -13,6 +13,6 @@ authors = [
     { name = "johancg04", email = "j.contreras.granados.04@gmail.com" }
 ]
 dependencies = [
-    "psycopg2==2.9.11",
+    "psycopg2-binary==2.9.11",
     "fastapi==0.127.1"
 ]

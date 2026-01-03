@@ -36,32 +36,32 @@ class ClienteRepository:
             if conn:
                 conn.close()
 
-    def mostrar(self) -> list | dict:
-        sql = """ SELECT * FROM cliente """
+    def listar(self) -> list[Cliente] | None:
+        sql = """ SELECT id_cliente, nombre, dni, telefono, correo
+                  FROM cliente """
         conn = None
-        cliente_mostrar = None
-        cliente = None
         lista_clientes = []
         try:
             conn = crear_conexion()
             with conn.cursor() as cursor:
                 cursor.execute(sql)
-                cliente_mostrar = cursor.fetchall()
-                for i in cliente_mostrar:
-                    cliente = Cliente(id=i[0], nombre=i[1], dni=i[2], telefono=i[3], correo=i[4])
+                results = cursor.fetchall()
+                for result in results:
+                    cliente = Cliente(id=result[0],
+                                      nombre=result[1],
+                                      dni=result[2],
+                                      telefono=result[3],
+                                      correo=result[4])
                     lista_clientes.append(cliente)
             conn.commit()
             return lista_clientes
-
         except(Exception, psycopg2.DatabaseError) as error:
             print(f"error: {error}")
             if conn:
                 conn.rollback()
-
         finally:
             if conn:
                 conn.close()
-
 
 
 cliente_repository = ClienteRepository()

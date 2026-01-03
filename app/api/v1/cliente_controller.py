@@ -8,8 +8,8 @@ router = APIRouter()
 
 @router.post('/v1/clientes', response_model=None)
 async def crear_cliente(cliente: ClienteCrear) -> Cliente | dict:
-    return cliente_service.agregar(cliente)
+    return cliente_service.crear(cliente)
 
 @router.get('/v1/clientes', response_model=None)
-async def listar_clientes() -> list | dict:
-    return cliente_service.mostrar_clientes()
+async def listar_clientes() -> list[Cliente] | dict:
+    return cliente_service.listar()

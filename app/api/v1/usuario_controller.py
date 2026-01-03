@@ -7,4 +7,4 @@ router = APIRouter()
 
 @router.post('/v1/usuarios', response_model=None)
 async def crear_usuario(usuario: UsuarioCrear) -> Usuario | dict:
-    return usuario_service.agregar(usuario)
+    return usuario_service.crear(usuario)

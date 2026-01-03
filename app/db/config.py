@@ -1,13 +1,31 @@
 import psycopg2
 
-def crear_conexion():
+def crear_conexion_windows():
     credenciales = {}
     with open('C:\\envios-api\\db.properties', 'r', encoding='utf8') as fh:
         for linea in fh:
             partes = linea.rstrip('\n').split('=')
             credenciales[partes[0]] = partes[1]
     conn = psycopg2.connect(**credenciales)
+    print("Conectado a PostgreSQL Windows")
     return conn
+
+def crear_conexion_macos():
+    credenciales = {}
+    with open('/Users/user/envios-api/db.properties', 'r', encoding='utf8') as fh:
+        for linea in fh:
+            partes = linea.rstrip('\n').split('=')
+            credenciales[partes[0]] = partes[1]
+    conn = psycopg2.connect(**credenciales)
+    print("Conectado a PostgreSQL MacOS")
+    return conn
+
+def crear_conexion():
+    # TODO usar variables de entorno para leer la configuracion de DB
+    try:
+        return crear_conexion_windows()
+    except Exception as e:
+        return crear_conexion_macos()
 
 try:
     conn = crear_conexion()
