@@ -6,11 +6,18 @@ class UsuarioService:
     def __init__(self):
         pass
 
-    def agregar(self, usuario_crear: UsuarioCrear) -> Usuario | dict:
+    def crear(self, usuario_crear: UsuarioCrear) -> Usuario | dict:
         nuevo_usuario = usuario_repository.insertar(usuario_crear)
         if nuevo_usuario:
             return nuevo_usuario
         else:
-            return {"mensaje_error":"Error al agregar usuario"}
+            return {"mensaje_error":"Error al crear usuario"}
+
+    def listar(self) -> list[Usuario] | dict:
+        lista_usuarios = usuario_repository.listar()
+        if lista_usuarios is not None:
+            return lista_usuarios
+        else:
+            return {"mensaje_error":"Error al listar usuarios"}
 
 usuario_service = UsuarioService()

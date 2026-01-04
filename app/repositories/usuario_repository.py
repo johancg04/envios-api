@@ -39,5 +39,34 @@ class UsuarioRepository:
             if conn:
                 conn.close()
 
+    def listar(self) -> list[Usuario] | None:
+        sql = """ SELECT id_usuario, nombre, correo, usuario, contrasenia, rol, estado FROM usuario """
+        conn = None
+        lista_usuarios = []
+        try:
+            conn = crear_conexion()
+            with conn.cursor() as cursor:
+                cursor.execute(sql)
+                results = cursor.fetchall()
+                for result in results:
+                    usuario = Usuario(id=result[0],
+                                      nombre=result[1],
+                                      correo=result[2],
+                                      usuario=result[3],
+                                      contrasenia='-',
+                                      rol=result[5],
+                                      estado=result[6])
+                    lista_usuarios.append(usuario)
+            conn.commit()
+            return lista_usuarios
+        except(Exception, psycopg2.DatabaseError) as error:
+            print(f"usuarios: {lista_usuarios}")
+            print(f"error: {error}")
+            if conn:
+                conn.rollback()
+        finally:
+            if conn:
+                conn.close()
+
 
 usuario_repository = UsuarioRepository()
