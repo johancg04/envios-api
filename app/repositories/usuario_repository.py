@@ -11,7 +11,7 @@ class UsuarioRepository:
     def insertar(self, usuario_crear: UsuarioCrear) -> Usuario | None:
         sql = """ INSERT INTO usuario(nombre, correo, usuario, contrasenia, rol, estado)
                   VALUES (%s, %s, %s, %s, %s, %s)
-                  RETURNING id_usuario, nombre, correo, usuario, contrasenia, rol, estado """
+                  RETURNING id_usuario, nombre, correo, usuario, rol, estado """
 
         conn = None
         usuario_nuevo = None
@@ -26,9 +26,9 @@ class UsuarioRepository:
                                         nombre=result[1],
                                         correo=result[2],
                                         usuario=result[3],
-                                        contrasenia=result[4],
-                                        rol=result[5],
-                                        estado=result[6])
+                                        contrasenia='-',
+                                        rol=result[4],
+                                        estado=result[5])
             conn.commit()
             return usuario_nuevo
         except (Exception, psycopg2.DatabaseError) as error:
@@ -40,7 +40,7 @@ class UsuarioRepository:
                 conn.close()
 
     def listar(self) -> list[Usuario] | None:
-        sql = """ SELECT id_usuario, nombre, correo, usuario, contrasenia, rol, estado FROM usuario """
+        sql = """ SELECT id_usuario, nombre, correo, usuario, rol, estado FROM usuario """
         conn = None
         lista_usuarios = []
         try:
@@ -54,8 +54,8 @@ class UsuarioRepository:
                                       correo=result[2],
                                       usuario=result[3],
                                       contrasenia='-',
-                                      rol=result[5],
-                                      estado=result[6])
+                                      rol=result[4],
+                                      estado=result[5])
                     lista_usuarios.append(usuario)
             conn.commit()
             return lista_usuarios

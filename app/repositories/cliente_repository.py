@@ -1,5 +1,3 @@
-from typing import Any
-
 import psycopg2
 
 from app.db.config import crear_conexion

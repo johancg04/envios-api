@@ -30,7 +30,7 @@ class EnvioRepository:
                                     telefono_destinatario=resultado[11])
             conn.commit()
             return envio_nuevo
-        except (Exception, psycopg2.DatabaseError) as error :
+        except (Exception, psycopg2.DatabaseError) as error:
             print(f"error: {error}")
             if conn:
                 conn.rollback()

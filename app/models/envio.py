@@ -1,4 +1,5 @@
-from datetime import date
+from datetime import datetime
+
 from pydantic import BaseModel
 
 
@@ -10,10 +11,11 @@ class EnvioCrear(BaseModel):
     destino: str
     peso: float
     importe: float
-    fecha_envio: date
+    fecha_envio: datetime
     dni_destinatario: str
     nombre_destinatario: str
     telefono_destinatario: str
+
 
 class Envio(BaseModel):
     id_envio: int
@@ -24,7 +26,7 @@ class Envio(BaseModel):
     destino: str
     peso: float
     importe: float
-    fecha_envio: date
+    fecha_envio: datetime
     dni_destinatario: str
     nombre_destinatario: str
     telefono_destinatario: str
