@@ -1,7 +1,7 @@
 import psycopg2
 
 from app.db.config import crear_conexion
-from app.models.seguiminento import SeguimientoCrear, Seguimiento
+from app.models.seguimiento import SeguimientoCrear, Seguimiento
 
 
 class SeguimientoRepository:

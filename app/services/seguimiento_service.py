@@ -1,4 +1,4 @@
-from app.models.seguiminento import SeguimientoCrear, Seguimiento
+from app.models.seguimiento import SeguimientoCrear, Seguimiento
 from app.repositories.seguimiento_repository import seguimiento_repository
 
 

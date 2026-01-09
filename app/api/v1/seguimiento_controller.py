@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.models.seguiminento import SeguimientoCrear, Seguimiento
+from app.models.seguimiento import SeguimientoCrear, Seguimiento
 from app.services.seguimiento_service import seguimiento_service
 
 router = APIRouter()

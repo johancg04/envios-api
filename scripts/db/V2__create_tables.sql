@@ -20,7 +20,7 @@ CREATE TABLE envio (
     id_envio serial PRIMARY KEY,
     id_cliente integer NOT NULL,
     id_usuario integer NOT NULL,
-    codigo_envio varchar(10) NOT NULL,
+    codigo_envio varchar(10) NOT NULL, -- 2601080001 o 0000000001
     origen varchar(20) NOT NULL,
     destino varchar(20) NOT NULL,
     peso float NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE seguimiento (
     destino varchar(20) NOT NULL,
     fecha_salida timestamp NOT NULL,
     fecha_llegada timestamp,
-    estatus varchar(20) NOT NULL,
+    estatus varchar(20) NOT NULL, -- En almacen, En camino, En destino, Entregado, (To-do: Retrasado)
 
     FOREIGN KEY (id_envio) REFERENCES envio(id_envio)
 )

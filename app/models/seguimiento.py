@@ -12,7 +12,7 @@ class SeguimientoCrear(BaseModel):
     estatus: str
 
 class Seguimiento(BaseModel):
-    id_seguimiento:int
+    id_seguimiento: int
     id_envio: int
     origen: str
     destino: str

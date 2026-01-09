@@ -8,3 +8,41 @@ Para ejecutar la aplicacion, seguir los siguientes pasos:
 
 
 source venv/bin/activate & fastapi dev main.py
+
+
+Almacenes:
+- Tumbes
+- Loreto
+- Piura
+- Ancash
+- Huanuco
+- Huacho (Lima)
+- Los Olivos (Lima)
+- La Victoria (Lima)
+- Lurin (Lima)
+- Chilca (Lima)
+- Canete (Lima)
+- Ica
+- Arequipa
+- Cuzco
+- Tacna
+
+
+Rutas Departamentales:
+- Piura - Tumbes
+- Ancash - Piura
+- Lima - Ancash
+- Huanuco - Ancash
+- Huanuco - Loreto
+- Lima - Ica
+- Ica - Arequipa
+- Arequipa - Cuzco
+- Arequipa - Tacna
+
+
+Rutas en Lima:
+- Los Olivos - Huacho
+- La Victoria - Los Olivos
+- La Victoria - Lurin
+- Lurin - Chilca
+- Chilca - Canete
