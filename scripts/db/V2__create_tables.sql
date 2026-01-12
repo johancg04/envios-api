@@ -41,7 +41,7 @@ CREATE TABLE seguimiento (
     destino varchar(20) NOT NULL,
     fecha_salida timestamp NOT NULL,
     fecha_llegada timestamp,
-    estatus varchar(20) NOT NULL, -- En almacen, En camino, En destino, Entregado, (To-do: Retrasado)
+    estatus varchar(20) NOT NULL, -- Registrado, En almacen, En camino, En destino, Entregado, (To-do: Retrasado)
 
     FOREIGN KEY (id_envio) REFERENCES envio(id_envio)
 )

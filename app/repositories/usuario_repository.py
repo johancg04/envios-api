@@ -1,7 +1,7 @@
 import psycopg2
 
 from app.db.config import crear_conexion
-from app.models.usuario import UsuarioCrear, Usuario
+from app.models.usuario import UsuarioCrear, Usuario, UsuarioLogin
 
 
 class UsuarioRepository:
@@ -10,8 +10,7 @@ class UsuarioRepository:
 
     def insertar(self, usuario_crear: UsuarioCrear) -> Usuario | None:
         sql = """ INSERT INTO usuario(nombre, correo, usuario, contrasenia, rol, estado)
-                  VALUES (%s, %s, %s, %s, %s, %s)
-                  RETURNING id_usuario, nombre, correo, usuario, rol, estado """
+                  VALUES (%s, %s, %s, %s, %s, %s) RETURNING id_usuario, nombre, correo, usuario, rol, estado """
 
         conn = None
         usuario_nuevo = None
@@ -19,7 +18,8 @@ class UsuarioRepository:
             conn = crear_conexion()
             with conn.cursor() as cursor:
                 cursor.execute(sql,
-                               (usuario_crear.nombre, usuario_crear.correo, usuario_crear.usuario, usuario_crear.contrasenia,
+                               (usuario_crear.nombre, usuario_crear.correo, usuario_crear.usuario,
+                                usuario_crear.contrasenia,
                                 usuario_crear.rol, usuario_crear.estado))
                 result = cursor.fetchone()
                 usuario_nuevo = Usuario(id=result[0],
@@ -40,7 +40,8 @@ class UsuarioRepository:
                 conn.close()
 
     def listar(self) -> list[Usuario] | None:
-        sql = """ SELECT id_usuario, nombre, correo, usuario, rol, estado FROM usuario """
+        sql = """ SELECT id_usuario, nombre, correo, usuario, rol, estado
+                  FROM usuario """
         conn = None
         lista_usuarios = []
         try:
@@ -60,7 +61,29 @@ class UsuarioRepository:
             conn.commit()
             return lista_usuarios
         except(Exception, psycopg2.DatabaseError) as error:
-            print(f"usuarios: {lista_usuarios}")
+            print(f"error: {error}")
+            if conn:
+                conn.rollback()
+        finally:
+            if conn:
+                conn.close()
+
+    def buscar(self, usuario_login: UsuarioLogin) -> str | None:
+        sql = """ SELECT usuario
+                  FROM usuario
+                  WHERE usuario = %s
+                    AND contrasenia = %s """
+        conn = None
+        try:
+            conn = crear_conexion()
+            with conn.cursor() as cursor:
+                cursor.execute(sql, (usuario_login.usuario, usuario_login.contrasenia))
+                result = cursor.fetchone()
+            conn.commit()
+            if result:
+                return result[0]
+            return None
+        except(Exception, psycopg2.DatabaseError) as error:
             print(f"error: {error}")
             if conn:
                 conn.rollback()

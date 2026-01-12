@@ -17,3 +17,7 @@ class Usuario(BaseModel):
     estado: str
     usuario: str
     contrasenia: str
+
+class UsuarioLogin(BaseModel):
+    usuario: str
+    contrasenia: str

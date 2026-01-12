@@ -46,3 +46,10 @@ Rutas en Lima:
 - La Victoria - Lurin
 - Lurin - Chilca
 - Chilca - Canete
+
+
+Rutas simplificadas:
+- Ancash - Lima
+- Lima - Chilca
+- Chilca - Ica
+- Ica - Arequipa
