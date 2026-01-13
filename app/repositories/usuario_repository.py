@@ -58,18 +58,15 @@ class UsuarioRepository:
                                       rol=result[4],
                                       estado=result[5])
                     lista_usuarios.append(usuario)
-            conn.commit()
             return lista_usuarios
         except(Exception, psycopg2.DatabaseError) as error:
             print(f"error: {error}")
-            if conn:
-                conn.rollback()
         finally:
             if conn:
                 conn.close()
 
-    def buscar(self, usuario_login: UsuarioLogin) -> str | None:
-        sql = """ SELECT usuario
+    def buscar(self, usuario_login: UsuarioLogin) -> bool:
+        sql = """ SELECT COUNT(1)
                   FROM usuario
                   WHERE usuario = %s
                     AND contrasenia = %s """
@@ -79,14 +76,11 @@ class UsuarioRepository:
             with conn.cursor() as cursor:
                 cursor.execute(sql, (usuario_login.usuario, usuario_login.contrasenia))
                 result = cursor.fetchone()
-            conn.commit()
-            if result:
-                return result[0]
-            return None
+            total_usuarios = result[0]
+            return total_usuarios > 0
         except(Exception, psycopg2.DatabaseError) as error:
             print(f"error: {error}")
-            if conn:
-                conn.rollback()
+            raise error
         finally:
             if conn:
                 conn.close()

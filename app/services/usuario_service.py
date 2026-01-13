@@ -21,11 +21,14 @@ class UsuarioService:
             return {"mensaje_error": "Error al listar usuarios"}
 
     def loguear(self, usuario_login: UsuarioLogin) -> dict:
-        usuario_encontrado = usuario_repository.buscar(usuario_login)
-        if usuario_encontrado is None:
-            return {"mensaje_error": "Datos del usuario no son validos"}
-        else:
-            return {"mensaje": "Ingreso exitoso"}
+        try:
+            usuario_encontrado = usuario_repository.buscar(usuario_login)
+            if usuario_encontrado:
+                return {"mensaje": "Ingreso exitoso"}
+            else:
+                return {"mensaje_error": "Datos del usuario no son validos"}
+        except:
+            return {"mensaje_error": "Error en el login"}
 
 
 usuario_service = UsuarioService()

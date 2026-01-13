@@ -7,10 +7,13 @@ class ClienteService:
         pass
 
     def crear(self, cliente_crear: ClienteCrear) -> Cliente | dict:
-        nuevo_cliente = cliente_repository.insertar(cliente_crear)
-        if nuevo_cliente:
-            return nuevo_cliente
-        else:
+        try:
+            if cliente_repository.buscar_dni(cliente_crear.dni):
+                return {"mensaje_error": f"Ya existe un cliente con el DNI: {cliente_crear.dni}"}
+            else:
+                nuevo_cliente = cliente_repository.insertar(cliente_crear)
+                return nuevo_cliente
+        except:
             return {"mensaje_error": "Error al crear cliente"}
 
     def listar(self) -> list[Cliente] | dict:
@@ -19,5 +22,6 @@ class ClienteService:
             return lista_clientes
         else:
             return {"mensaje_error": "Error al listar clientes"}
+
 
 cliente_service = ClienteService()

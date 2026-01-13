@@ -8,7 +8,7 @@ class ClienteRepository:
     def __init__(self):
         pass
 
-    def insertar(self, cliente_crear: ClienteCrear) -> Cliente | None:
+    def insertar(self, cliente_crear: ClienteCrear) -> Cliente:
         sql = """ INSERT INTO cliente(nombre, dni, telefono, correo)
                   VALUES (%s, %s, %s, %s) RETURNING id_cliente, nombre, dni, telefono, correo """
         conn = None
@@ -30,6 +30,7 @@ class ClienteRepository:
             print(f"error: {error}")
             if conn:
                 conn.rollback()
+            raise error
         finally:
             if conn:
                 conn.close()
@@ -51,12 +52,27 @@ class ClienteRepository:
                                       telefono=result[3],
                                       correo=result[4])
                     lista_clientes.append(cliente)
-            conn.commit()
             return lista_clientes
         except(Exception, psycopg2.DatabaseError) as error:
             print(f"error: {error}")
+        finally:
             if conn:
-                conn.rollback()
+                conn.close()
+
+
+    def buscar_dni(self, dni: str) -> bool:
+        sql = """ SELECT COUNT(1) FROM cliente WHERE dni = %s """
+        conn = None
+        try:
+            conn = crear_conexion()
+            with conn.cursor() as cursor:
+                cursor.execute(sql, (dni,))
+                result = cursor.fetchone()
+            total_clientes = result[0]
+            return total_clientes > 0
+        except(Exception, psycopg2.DatabaseError) as error:
+            print(f"error: {error}")
+            raise error
         finally:
             if conn:
                 conn.close()
