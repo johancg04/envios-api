@@ -1,4 +1,4 @@
-from app.models.envio import EnvioCrear, Envio
+from app.models.envio import EnvioCrear, Envio, EnvioInfo
 from app.repositories.envio_repository import envio_repository
 
 
@@ -12,5 +12,13 @@ class EnvioService:
             return nuevo_envio
         else:
             return {"mensaje_error": "Error al crear envio"}
+
+    def buscar(self) -> list[EnvioInfo] | dict:
+        lista_envios = envio_repository.buscar()
+        if lista_envios is not None:
+            return lista_envios
+        else:
+            return {"mensaje_error": "Error al listar envios"}
+
 
 envio_service = EnvioService()

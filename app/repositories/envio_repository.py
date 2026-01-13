@@ -1,7 +1,7 @@
 import psycopg2
 
 from app.db.config import crear_conexion
-from app.models.envio import EnvioCrear, Envio
+from app.models.envio import EnvioCrear, Envio, EnvioInfo
 
 
 class EnvioRepository:
@@ -34,6 +34,32 @@ class EnvioRepository:
             print(f"error: {error}")
             if conn:
                 conn.rollback()
+        finally:
+            if conn:
+                conn.close()
+
+    def buscar(self) -> list[EnvioInfo] | None:
+        sql = """ SELECT codigo_envio, cli.nombre, nombre_destinatario, origen, destino, fecha_envio
+                  FROM envio env
+                           INNER JOIN cliente cli ON env.id_cliente = cli.id_cliente """
+        conn = None
+        lista_envios = []
+        try:
+            conn = crear_conexion()
+            with conn.cursor() as cursor:
+                cursor.execute(sql)
+                results = cursor.fetchall()
+                for result in results:
+                    envio = EnvioInfo(codigo_envio=result[0],
+                                      nombre_cliente = result[1],
+                                      nombre_destinatario=result[2],
+                                      origen=result[3],
+                                      destino=result[4],
+                                      fecha_envio=result[5])
+                    lista_envios.append(envio)
+            return lista_envios
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(f"error: {error}")
         finally:
             if conn:
                 conn.close()

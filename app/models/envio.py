@@ -30,3 +30,11 @@ class Envio(BaseModel):
     dni_destinatario: str
     nombre_destinatario: str
     telefono_destinatario: str
+
+class EnvioInfo(BaseModel):
+    codigo_envio: str
+    nombre_cliente: str
+    nombre_destinatario: str
+    origen: str
+    destino: str
+    fecha_envio: datetime
