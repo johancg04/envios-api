@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import psycopg2
 
 from app.db.config import crear_conexion
@@ -8,7 +10,7 @@ class EnvioRepository:
     def __init__(self):
         pass
 
-    def insertar(self, envio_crear: EnvioCrear) -> Envio | None:
+    def insertar(self, envio_crear: EnvioCrear, fecha_envio: datetime) -> Envio | None:
         sql = """ INSERT INTO envio(id_cliente, id_usuario, codigo_envio, origen, destino, peso, importe, fecha_envio,
                                     dni_destinatario, nombre_destinatario, telefono_destinatario)
                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id_envio, id_cliente, id_usuario, codigo_envio, origen, destino, peso, importe, fecha_envio,
@@ -20,7 +22,7 @@ class EnvioRepository:
             with conn.cursor() as cursor:
                 cursor.execute(sql, (envio_crear.id_cliente, envio_crear.id_usuario, envio_crear.codigo_envio,
                                      envio_crear.origen, envio_crear.destino, envio_crear.peso, envio_crear.importe,
-                                     envio_crear.fecha_envio, envio_crear.dni_destinatario,
+                                     fecha_envio, envio_crear.dni_destinatario,
                                      envio_crear.nombre_destinatario, envio_crear.telefono_destinatario))
                 resultado = cursor.fetchone()
                 envio_nuevo = Envio(id_envio=resultado[0], id_cliente=resultado[1], id_usuario=resultado[2],

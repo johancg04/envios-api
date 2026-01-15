@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app.models.envio import EnvioCrear, Envio, EnvioInfo, EnvioVer
 from app.repositories.envio_repository import envio_repository
 
@@ -7,7 +9,8 @@ class EnvioService:
         pass
 
     def crear(self, envio_crear: EnvioCrear) -> Envio | dict:
-        nuevo_envio = envio_repository.insertar(envio_crear)
+        fecha_envio = datetime.now()
+        nuevo_envio = envio_repository.insertar(envio_crear, fecha_envio)
         if nuevo_envio:
             return nuevo_envio
         else:

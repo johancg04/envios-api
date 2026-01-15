@@ -11,7 +11,6 @@ class EnvioCrear(BaseModel):
     destino: str
     peso: float
     importe: float
-    fecha_envio: datetime
     dni_destinatario: str
     nombre_destinatario: str
     telefono_destinatario: str
