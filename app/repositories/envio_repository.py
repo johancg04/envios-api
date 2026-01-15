@@ -1,7 +1,7 @@
 import psycopg2
 
 from app.db.config import crear_conexion
-from app.models.envio import EnvioCrear, Envio, EnvioInfo
+from app.models.envio import EnvioCrear, Envio, EnvioInfo, EnvioVer
 
 
 class EnvioRepository:
@@ -51,13 +51,47 @@ class EnvioRepository:
                 results = cursor.fetchall()
                 for result in results:
                     envio = EnvioInfo(codigo_envio=result[0],
-                                      nombre_cliente = result[1],
+                                      nombre_cliente=result[1],
                                       nombre_destinatario=result[2],
                                       origen=result[3],
                                       destino=result[4],
                                       fecha_envio=result[5])
                     lista_envios.append(envio)
             return lista_envios
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(f"error: {error}")
+        finally:
+            if conn:
+                conn.close()
+
+    def obtener(self, id_envio: int) -> EnvioVer | None:
+        sql = """ SELECT id_envio,
+                         fecha_envio,
+                         peso,
+                         importe,
+                         cli.dni,
+                         cli.nombre,
+                         cli.telefono,
+                         cli.correo,
+                         dni_destinatario,
+                         nombre_destinatario,
+                         telefono_destinatario
+                  FROM envio env
+                           INNER JOIN cliente cli ON env.id_cliente = cli.id_cliente
+                  WHERE env.id_envio = %s """
+
+        conn = None
+        try:
+            conn = crear_conexion()
+            with conn.cursor() as cursor:
+                cursor.execute(sql, (id_envio,))
+                resultado = cursor.fetchone()
+                envio = EnvioVer(id_envio=resultado[0], fecha_envio=resultado[1], peso=resultado[2],
+                                 importe=resultado[3], dni=resultado[4],
+                                 nombre=resultado[5], telefono=resultado[6], correo=resultado[7],
+                                 dni_destinatario=resultado[8], nombre_destinatario=resultado[9],
+                                 telefono_destinatario=resultado[10])
+            return envio
         except (Exception, psycopg2.DatabaseError) as error:
             print(f"error: {error}")
         finally:

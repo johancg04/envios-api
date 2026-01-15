@@ -12,3 +12,7 @@ async def crear_envio(envio_crear: EnvioCrear) -> Envio | dict:
 @router.get('/v1/envios', response_model=None)
 async def buscar_envios() -> list[EnvioInfo] | dict:
     return envio_service.buscar()
+
+@router.get('/v1/envios/{id_envio}', response_model=None)
+async def ver_detalle(id_envio) -> dict:
+    return envio_service.ver_detalle(id_envio)
