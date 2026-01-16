@@ -10,7 +10,7 @@ class EnvioRepository:
     def __init__(self):
         pass
 
-    def insertar(self, envio_crear: EnvioCrear, fecha_envio: datetime) -> Envio | None:
+    def insertar(self, envio_crear: EnvioCrear, fecha_envio: datetime, codigo_envio: str) -> Envio | None:
         sql = """ INSERT INTO envio(id_cliente, id_usuario, codigo_envio, origen, destino, peso, importe, fecha_envio,
                                     dni_destinatario, nombre_destinatario, telefono_destinatario)
                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id_envio, id_cliente, id_usuario, codigo_envio, origen, destino, peso, importe, fecha_envio,
@@ -20,7 +20,7 @@ class EnvioRepository:
         try:
             conn = crear_conexion()
             with conn.cursor() as cursor:
-                cursor.execute(sql, (envio_crear.id_cliente, envio_crear.id_usuario, envio_crear.codigo_envio,
+                cursor.execute(sql, (envio_crear.id_cliente, envio_crear.id_usuario, codigo_envio,
                                      envio_crear.origen, envio_crear.destino, envio_crear.peso, envio_crear.importe,
                                      fecha_envio, envio_crear.dni_destinatario,
                                      envio_crear.nombre_destinatario, envio_crear.telefono_destinatario))
@@ -100,5 +100,20 @@ class EnvioRepository:
             if conn:
                 conn.close()
 
+    def obtener_codigo_seq(self) -> int:
+        sql = """ SELECT nextval('codigo_envio_seq') """
+        conn = None
+        try:
+            conn = crear_conexion()
+            with conn.cursor() as cursor:
+                cursor.execute(sql)
+                resultado = cursor.fetchone()
+            return resultado[0]
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(f"error: {error}")
+            raise error
+        finally:
+            if conn:
+                conn.close()
 
 envio_repository = EnvioRepository()

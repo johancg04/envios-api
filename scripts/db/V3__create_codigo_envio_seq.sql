@@ -1,0 +1,7 @@
+CREATE SEQUENCE codigo_envio_seq
+    INCREMENT BY 1
+    START WITH 1
+    MINVALUE 1
+    MAXVALUE 9999
+    CACHE 1
+    CYCLE;

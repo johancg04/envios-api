@@ -6,7 +6,6 @@ from pydantic import BaseModel
 class EnvioCrear(BaseModel):
     id_cliente: int
     id_usuario: int
-    codigo_envio: str
     origen: str
     destino: str
     peso: float
