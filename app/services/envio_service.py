@@ -28,8 +28,8 @@ class EnvioService:
         else:
             return {"mensaje_error": "Error al crear envio"}
 
-    def buscar(self) -> list[EnvioInfo] | dict:
-        lista_envios = envio_repository.buscar()
+    def buscar(self, identificador: str) -> list[EnvioInfo] | dict:
+        lista_envios = envio_repository.buscar(identificador)
         if lista_envios is not None:
             return lista_envios
         else:

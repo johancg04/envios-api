@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.models.envio import EnvioCrear, Envio, EnvioInfo
+from app.models.envio import EnvioCrear, Envio, EnvioInfo, EnvioVer
 from app.services.envio_service import envio_service
 
 router = APIRouter()
@@ -10,9 +10,9 @@ async def crear_envio(envio_crear: EnvioCrear) -> Envio | dict:
     return envio_service.crear(envio_crear)
 
 @router.get('/v1/envios', response_model=None)
-async def buscar_envios() -> list[EnvioInfo] | dict:
-    return envio_service.buscar()
+async def buscar_envios(identificador: str) -> list[EnvioInfo] | dict:
+    return envio_service.buscar(identificador)
 
 @router.get('/v1/envios/{id_envio}', response_model=None)
-async def ver_detalle(id_envio) -> dict:
+async def ver_detalle(id_envio) -> EnvioVer | dict:
     return envio_service.ver_detalle(id_envio)

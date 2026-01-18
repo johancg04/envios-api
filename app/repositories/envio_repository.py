@@ -40,24 +40,27 @@ class EnvioRepository:
             if conn:
                 conn.close()
 
-    def buscar(self) -> list[EnvioInfo] | None:
-        sql = """ SELECT codigo_envio, cli.nombre, nombre_destinatario, origen, destino, fecha_envio
+    def buscar(self, identificador: str) -> list[EnvioInfo] | None:
+        sql = """ SELECT id_envio, codigo_envio, cli.nombre, nombre_destinatario, origen, destino, fecha_envio
                   FROM envio env
-                           INNER JOIN cliente cli ON env.id_cliente = cli.id_cliente """
+                           INNER JOIN cliente cli ON env.id_cliente = cli.id_cliente
+                  WHERE env.codigo_envio = %s
+                     OR cli.dni = %s """
         conn = None
         lista_envios = []
         try:
             conn = crear_conexion()
             with conn.cursor() as cursor:
-                cursor.execute(sql)
+                cursor.execute(sql, (identificador, identificador))
                 results = cursor.fetchall()
                 for result in results:
-                    envio = EnvioInfo(codigo_envio=result[0],
-                                      nombre_cliente=result[1],
-                                      nombre_destinatario=result[2],
-                                      origen=result[3],
-                                      destino=result[4],
-                                      fecha_envio=result[5])
+                    envio = EnvioInfo(id_envio=result[0],
+                                      codigo_envio=result[1],
+                                      nombre_cliente=result[2],
+                                      nombre_destinatario=result[3],
+                                      origen=result[4],
+                                      destino=result[5],
+                                      fecha_envio=result[6])
                     lista_envios.append(envio)
             return lista_envios
         except (Exception, psycopg2.DatabaseError) as error:
@@ -115,5 +118,6 @@ class EnvioRepository:
         finally:
             if conn:
                 conn.close()
+
 
 envio_repository = EnvioRepository()
