@@ -3,7 +3,7 @@ from datetime import datetime
 import psycopg2
 
 from app.db.config import crear_conexion
-from app.models.envio import EnvioCrear, Envio, EnvioInfo, EnvioVer
+from app.models.envio import EnvioCrear, Envio, EnvioDetalle, EnvioVer
 
 
 class EnvioRepository:
@@ -40,27 +40,27 @@ class EnvioRepository:
             if conn:
                 conn.close()
 
-    def buscar(self, identificador: str) -> list[EnvioInfo] | None:
+    def buscar(self, identificador: str) -> list[EnvioDetalle] | None:
         sql = """ SELECT id_envio, codigo_envio, cli.nombre, nombre_destinatario, origen, destino, fecha_envio
                   FROM envio env
                            INNER JOIN cliente cli ON env.id_cliente = cli.id_cliente
                   WHERE env.codigo_envio = %s
-                     OR cli.dni = %s """
+                     OR cli.dni = %s OR env.dni_destinatario = %s ORDER BY(id_envio) DESC """
         conn = None
         lista_envios = []
         try:
             conn = crear_conexion()
             with conn.cursor() as cursor:
-                cursor.execute(sql, (identificador, identificador))
+                cursor.execute(sql, (identificador, identificador, identificador))
                 results = cursor.fetchall()
                 for result in results:
-                    envio = EnvioInfo(id_envio=result[0],
-                                      codigo_envio=result[1],
-                                      nombre_cliente=result[2],
-                                      nombre_destinatario=result[3],
-                                      origen=result[4],
-                                      destino=result[5],
-                                      fecha_envio=result[6])
+                    envio = EnvioDetalle(id_envio=result[0],
+                                         codigo_envio=result[1],
+                                         nombre_cliente=result[2],
+                                         nombre_destinatario=result[3],
+                                         origen=result[4],
+                                         destino=result[5],
+                                         fecha_envio=result[6])
                     lista_envios.append(envio)
             return lista_envios
         except (Exception, psycopg2.DatabaseError) as error:

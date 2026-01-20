@@ -29,7 +29,7 @@ class Envio(BaseModel):
     nombre_destinatario: str
     telefono_destinatario: str
 
-class EnvioInfo(BaseModel):
+class EnvioDetalle(BaseModel):
     id_envio: int
     codigo_envio: str
     nombre_cliente: str
