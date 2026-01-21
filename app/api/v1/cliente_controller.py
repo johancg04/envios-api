@@ -10,5 +10,5 @@ async def crear_cliente(cliente_crear: ClienteCrear) -> Cliente | dict:
     return cliente_service.crear(cliente_crear)
 
 @router.get('/v1/clientes', response_model=None)
-async def listar_clientes() -> list[Cliente] | dict:
-    return cliente_service.listar()
+async def buscar_cliente(dni: str) -> Cliente | dict:
+    return cliente_service.buscar(dni)

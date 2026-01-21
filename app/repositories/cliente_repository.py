@@ -35,41 +35,19 @@ class ClienteRepository:
             if conn:
                 conn.close()
 
-    def listar(self) -> list[Cliente] | None:
+    def buscar_dni(self, dni: str) -> Cliente | None:
         sql = """ SELECT id_cliente, nombre, dni, telefono, correo
-                  FROM cliente """
-        conn = None
-        lista_clientes = []
-        try:
-            conn = crear_conexion()
-            with conn.cursor() as cursor:
-                cursor.execute(sql)
-                results = cursor.fetchall()
-                for result in results:
-                    cliente = Cliente(id=result[0],
-                                      nombre=result[1],
-                                      dni=result[2],
-                                      telefono=result[3],
-                                      correo=result[4])
-                    lista_clientes.append(cliente)
-            return lista_clientes
-        except(Exception, psycopg2.DatabaseError) as error:
-            print(f"error: {error}")
-        finally:
-            if conn:
-                conn.close()
-
-
-    def buscar_dni(self, dni: str) -> bool:
-        sql = """ SELECT COUNT(1) FROM cliente WHERE dni = %s """
+                  FROM cliente
+                  WHERE dni = %s """
         conn = None
         try:
             conn = crear_conexion()
             with conn.cursor() as cursor:
                 cursor.execute(sql, (dni,))
                 result = cursor.fetchone()
-            total_clientes = result[0]
-            return total_clientes > 0
+            if result:
+                cliente = Cliente(id=result[0], nombre=result[1], dni=result[2], telefono=result[3], correo=result[4])
+                return cliente
         except(Exception, psycopg2.DatabaseError) as error:
             print(f"error: {error}")
             raise error

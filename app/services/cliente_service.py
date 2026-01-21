@@ -16,12 +16,12 @@ class ClienteService:
         except:
             return {"mensaje_error": "Error al crear cliente"}
 
-    def listar(self) -> list[Cliente] | dict:
-        lista_clientes = cliente_repository.listar()
-        if lista_clientes is not None:
-            return lista_clientes
+    def buscar(self, dni: str) -> Cliente | dict:
+        cliente = cliente_repository.buscar_dni(dni)
+        if cliente is not None:
+            return cliente
         else:
-            return {"mensaje_error": "Error al listar clientes"}
+            return {"mensaje_error": f"Cliente con DNI: {dni} no encontrado"}
 
 
 cliente_service = ClienteService()
